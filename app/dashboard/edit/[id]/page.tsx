@@ -1,171 +1,203 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Label } from '@/components/ui/label'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
-import 'katex/dist/katex.min.css'
-import { ArrowLeft, Save, Send, Trash2 } from 'lucide-react'
-import Link from 'next/link'
-import { toast } from 'sonner'
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+import { ArrowLeft, Save, Send, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
 
 interface Article {
-  id: string
-  title: string
-  abstract: string
-  content: string
-  tags: string[]
-  published: boolean
+  id: string;
+  title: string;
+  abstract: string;
+  content: string;
+  tags: string[];
+  published: boolean;
 }
 
-export default function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
-  const router = useRouter()
-  const [articleId, setArticleId] = useState<string | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
-  const [isPublishing, setIsPublishing] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+export default function EditArticlePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const router = useRouter();
+  const [articleId, setArticleId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
-    title: '',
-    abstract: '',
-    content: '',
-    tags: '',
-    pseudonym: '',
+    title: "",
+    abstract: "",
+    content: "",
+    references: "",
+    tags: "",
+    pseudonym: "",
     published: false,
-  })
+  });
 
   useEffect(() => {
     params.then((resolvedParams) => {
-      setArticleId(resolvedParams.id)
-      fetchArticle(resolvedParams.id)
-    })
-  }, [])
+      setArticleId(resolvedParams.id);
+      fetchArticle(resolvedParams.id);
+    });
+  }, []);
 
   const fetchArticle = async (id: string) => {
     try {
-      const response = await fetch(`/api/articles/${id}`)
+      const response = await fetch(`/api/articles/${id}`);
       if (response.ok) {
-        const article: Article = await response.json()
+        const article: Article = await response.json();
         setFormData({
           title: article.title,
           abstract: article.abstract,
           content: article.content,
-          tags: article.tags.join(', '),
-          pseudonym: (article as any).pseudonym || '',
+          references: (article as any).references || "",
+          tags: article.tags.join(", "),
+          pseudonym: (article as any).pseudonym || "",
           published: article.published,
-        })
+        });
       }
     } catch (error) {
-      console.error('Error fetching article:', error)
-      toast.error('Failed to load article')
+      console.error("Error fetching article:", error);
+      toast.error("Failed to load article");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleSave = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault()
-    if (!articleId) return
-    
-    setIsSaving(true)
+    if (e) e.preventDefault();
+    if (!articleId) return;
+
+    setIsSaving(true);
 
     try {
       const response = await fetch(`/api/articles/${articleId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+          tags: formData.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
         }),
-      })
+      });
 
       if (response.ok) {
-        toast.success('Article saved successfully!')
-        router.refresh()
+        toast.success("Article saved successfully!");
+        router.refresh();
       } else {
-        toast.error('Failed to save article')
+        toast.error("Failed to save article");
       }
     } catch (error) {
-      toast.error('Error saving article')
+      toast.error("Error saving article");
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   const handlePublish = async () => {
-    if (!articleId) return
-    
-    setIsPublishing(true)
+    if (!articleId) return;
+
+    setIsPublishing(true);
 
     try {
       const response = await fetch(`/api/articles/${articleId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+          tags: formData.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
           published: !formData.published,
         }),
-      })
+      });
 
       if (response.ok) {
-        setFormData({ ...formData, published: !formData.published })
-        toast.success(formData.published ? 'Article unpublished' : 'Article published successfully!')
-        router.refresh()
+        setFormData({ ...formData, published: !formData.published });
+        toast.success(
+          formData.published
+            ? "Article unpublished"
+            : "Article published successfully!"
+        );
+        router.refresh();
       } else {
-        const errorData = await response.json().catch(() => ({}))
-        console.error('Publish error:', { status: response.status, statusText: response.statusText, errorData })
-        toast.error(errorData.error || `Failed to publish article (${response.status})`)
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Publish error:", {
+          status: response.status,
+          statusText: response.statusText,
+          errorData,
+        });
+        toast.error(
+          errorData.error || `Failed to publish article (${response.status})`
+        );
       }
     } catch (error) {
-      toast.error('Error publishing article')
+      toast.error("Error publishing article");
     } finally {
-      setIsPublishing(false)
+      setIsPublishing(false);
     }
-  }
+  };
 
   const handleDelete = async () => {
-    if (!articleId) return
-    
-    if (!confirm('Are you sure you want to delete this article? This action cannot be undone.')) {
-      return
+    if (!articleId) return;
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this article? This action cannot be undone."
+      )
+    ) {
+      return;
     }
 
-    setIsDeleting(true)
+    setIsDeleting(true);
 
     try {
       const response = await fetch(`/api/articles/${articleId}`, {
-        method: 'DELETE',
-      })
+        method: "DELETE",
+      });
 
       if (response.ok) {
-        toast.success('Article deleted successfully')
-        router.push('/dashboard')
-        router.refresh()
+        toast.success("Article deleted successfully");
+        router.push("/dashboard");
+        router.refresh();
       } else {
-        toast.error('Failed to delete article')
+        toast.error("Failed to delete article");
       }
     } catch (error) {
-      toast.error('Error deleting article')
+      toast.error("Error deleting article");
     } finally {
-      setIsDeleting(false)
+      setIsDeleting(false);
     }
-  }
+  };
 
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex items-center justify-center">
         <p className="text-muted-foreground">Loading article...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -177,14 +209,14 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
             Back to Dashboard
           </Button>
         </Link>
-        <Button 
-          variant="destructive" 
+        <Button
+          variant="destructive"
           size="sm"
           onClick={handleDelete}
           disabled={isDeleting}
         >
           <Trash2 className="mr-2 h-4 w-4" />
-          {isDeleting ? 'Deleting...' : 'Delete'}
+          {isDeleting ? "Deleting..." : "Delete"}
         </Button>
       </div>
 
@@ -203,7 +235,9 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                 id="title"
                 placeholder="Article title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 required
               />
             </div>
@@ -214,7 +248,9 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                 id="abstract"
                 placeholder="Brief summary of your article"
                 value={formData.abstract}
-                onChange={(e) => setFormData({ ...formData, abstract: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, abstract: e.target.value })
+                }
                 rows={4}
                 required
               />
@@ -226,7 +262,9 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                 id="tags"
                 placeholder="machine learning, AI, neural networks (comma separated)"
                 value={formData.tags}
-                onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, tags: e.target.value })
+                }
               />
             </div>
 
@@ -236,10 +274,29 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                 id="pseudonym"
                 placeholder="Leave empty to use your real name"
                 value={formData.pseudonym}
-                onChange={(e) => setFormData({ ...formData, pseudonym: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, pseudonym: e.target.value })
+                }
               />
               <p className="text-xs text-muted-foreground">
-                If provided, this name will be displayed instead of your real name on the published article.
+                If provided, this name will be displayed instead of your real
+                name on the published article.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="references">References (optional)</Label>
+              <Textarea
+                id="references"
+                placeholder="List your references here (one per line)..."
+                value={formData.references}
+                onChange={(e) =>
+                  setFormData({ ...formData, references: e.target.value })
+                }
+                rows={6}
+              />
+              <p className="text-xs text-muted-foreground">
+                Add bibliographic references for your article.
               </p>
             </div>
 
@@ -254,7 +311,9 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                   <Textarea
                     placeholder="Write your article content in Markdown..."
                     value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, content: e.target.value })
+                    }
                     rows={20}
                     className="font-mono"
                     required
@@ -266,7 +325,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                       remarkPlugins={[remarkGfm, remarkMath]}
                       rehypePlugins={[rehypeKatex]}
                     >
-                      {formData.content || '*Preview will appear here...*'}
+                      {formData.content || "*Preview will appear here...*"}
                     </ReactMarkdown>
                   </div>
                 </TabsContent>
@@ -276,16 +335,20 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
             <div className="flex gap-4">
               <Button type="submit" disabled={isSaving}>
                 <Save className="mr-2 h-4 w-4" />
-                {isSaving ? 'Saving...' : 'Save'}
+                {isSaving ? "Saving..." : "Save"}
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant={formData.published ? "outline" : "default"}
                 onClick={handlePublish}
                 disabled={isPublishing}
               >
                 <Send className="mr-2 h-4 w-4" />
-                {isPublishing ? 'Processing...' : (formData.published ? 'Unpublish' : 'Publish')}
+                {isPublishing
+                  ? "Processing..."
+                  : formData.published
+                  ? "Unpublish"
+                  : "Publish"}
               </Button>
               <Link href="/dashboard">
                 <Button type="button" variant="outline">
@@ -297,5 +360,5 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

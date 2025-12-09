@@ -87,8 +87,8 @@ export default function ArticlesPage() {
 
   return (
     <div className="min-h-screen">
-      <Header 
-        showAuth 
+      <Header
+        showAuth
         centerContent={
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -166,13 +166,13 @@ export default function ArticlesPage() {
                           {article.title}
                         </h3>
                       </div>
-                      
+
                       {/* Autor na parte inferior */}
                       <div className="text-white/80 text-xs md:text-sm text-center font-serif">
                         {article.pseudonym || article.author.name}
                       </div>
                     </div>
-                    
+
                     {/* Efeito de borda do livro */}
                     <div className="absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-black/20 to-transparent"></div>
                   </div>
@@ -188,16 +188,21 @@ export default function ArticlesPage() {
                       <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
                         <div className="flex items-center gap-1">
                           <User className="h-3 w-3" />
-                          <span>{article.pseudonym || article.author.name}</span>
+                          <span>
+                            {article.pseudonym || article.author.name}
+                          </span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           <span>
-                            {new Date(article.createdAt).toLocaleDateString('en-US', { 
-                              month: 'short', 
-                              day: 'numeric', 
-                              year: 'numeric' 
-                            })}
+                            {new Date(article.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )}
                           </span>
                         </div>
                       </div>

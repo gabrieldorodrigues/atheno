@@ -30,6 +30,7 @@ export default function NewArticlePage() {
     title: "",
     abstract: "",
     content: "",
+    references: "",
     tags: "",
     pseudonym: "",
   });
@@ -135,7 +136,24 @@ export default function NewArticlePage() {
                 }
               />
               <p className="text-xs text-muted-foreground">
-                If provided, this name will be displayed instead of your real name on the published article.
+                If provided, this name will be displayed instead of your real
+                name on the published article.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="references">References (optional)</Label>
+              <Textarea
+                id="references"
+                placeholder="List your references here (one per line)..."
+                value={formData.references}
+                onChange={(e) =>
+                  setFormData({ ...formData, references: e.target.value })
+                }
+                rows={6}
+              />
+              <p className="text-xs text-muted-foreground">
+                Add bibliographic references for your article.
               </p>
             </div>
 

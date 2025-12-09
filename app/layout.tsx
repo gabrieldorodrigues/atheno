@@ -23,6 +23,11 @@ const merriweather = Merriweather({
 export const metadata: Metadata = {
   title: "Atheno",
   description: "Platform for creating and publishing scientific articles",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

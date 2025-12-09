@@ -8,7 +8,11 @@ interface HeaderProps {
   centerContent?: ReactNode;
 }
 
-export function Header({ showAuth = false, showBrowse = false, centerContent }: HeaderProps) {
+export function Header({
+  showAuth = false,
+  showBrowse = false,
+  centerContent,
+}: HeaderProps) {
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-8">
@@ -16,9 +20,7 @@ export function Header({ showAuth = false, showBrowse = false, centerContent }: 
           Atheno
         </Link>
         {centerContent && (
-          <div className="flex-1 max-w-2xl">
-            {centerContent}
-          </div>
+          <div className="flex-1 max-w-2xl">{centerContent}</div>
         )}
         <div className="flex gap-4 shrink-0">
           {showBrowse && (

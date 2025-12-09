@@ -71,7 +71,8 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
-    const { title, abstract, content, tags, published, pseudonym } = body;
+    const { title, abstract, content, references, tags, published, pseudonym } =
+      body;
 
     // Get user
     const user = await prisma.user.findUnique({
@@ -107,9 +108,10 @@ export async function PATCH(
     }
     if (abstract !== undefined) updateData.abstract = abstract;
     if (content !== undefined) updateData.content = content;
+    if (references !== undefined) updateData.references = references || null;
     if (tags !== undefined) updateData.tags = Array.isArray(tags) ? tags : [];
     if (pseudonym !== undefined) updateData.pseudonym = pseudonym || null;
-    
+
     // Check if user has permission to publish
     if (published !== undefined) {
       if (published === true && !user.canPublish) {

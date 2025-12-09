@@ -10,6 +10,7 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { Calendar, User } from "lucide-react";
 import { Header } from "@/components/header";
+import { ReferencesSection } from "@/components/references-section";
 
 export default async function ArticlePage({
   params,
@@ -97,6 +98,13 @@ export default async function ArticlePage({
           </div>
 
           <Separator className="my-8" />
+
+          {(article as any).references && (
+            <>
+              <ReferencesSection references={(article as any).references} />
+              <Separator className="my-8" />
+            </>
+          )}
 
           <footer className="text-sm text-muted-foreground">
             <p>
