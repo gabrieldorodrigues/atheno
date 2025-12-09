@@ -77,7 +77,14 @@ export default async function ArticlePage({
 
             <div className="flex gap-6 items-start">
               <div className="w-48 flex-shrink-0">
-                <ArticleCover title={article.title} />
+                <ArticleCover
+                  title={article.title}
+                  coverStyle={
+                    (article as any).coverStyle
+                      ? JSON.parse((article as any).coverStyle)
+                      : null
+                  }
+                />
               </div>
 
               <Card className="bg-muted/50 flex-1">

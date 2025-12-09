@@ -159,7 +159,14 @@ export default function ArticlesPage() {
               <div key={article.id} className="group relative">
                 <Link href={`/article/${article.slug}`}>
                   <div className="transition-all duration-300 group-hover:scale-105">
-                    <ArticleCover title={article.title} />
+                    <ArticleCover
+                      title={article.title}
+                      coverStyle={
+                        (article as any).coverStyle
+                          ? JSON.parse((article as any).coverStyle)
+                          : null
+                      }
+                    />
                   </div>
                 </Link>
 

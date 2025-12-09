@@ -22,7 +22,15 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, abstract, content, references, tags, pseudonym } = body;
+    const {
+      title,
+      abstract,
+      content,
+      references,
+      coverStyle,
+      tags,
+      pseudonym,
+    } = body;
 
     // Get or create user
     let user = await prisma.user.findUnique({
@@ -54,6 +62,7 @@ export async function POST(request: Request) {
         abstract,
         content,
         references: references || null,
+        coverStyle: coverStyle || null,
         tags: Array.isArray(tags) ? tags : [],
         pseudonym: pseudonym || null,
         authorId: user.id,

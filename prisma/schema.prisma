@@ -28,6 +28,7 @@ model Article {
   abstract   String
   content    String   @db.Text
   references String?  @db.Text
+  coverStyle String?  @db.Text
   tags       String[]
   pseudonym  String?
   published  Boolean  @default(false)
