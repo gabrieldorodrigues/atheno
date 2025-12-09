@@ -38,6 +38,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
     abstract: '',
     content: '',
     tags: '',
+    pseudonym: '',
     published: false,
   })
 
@@ -58,6 +59,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
           abstract: article.abstract,
           content: article.content,
           tags: article.tags.join(', '),
+          pseudonym: (article as any).pseudonym || '',
           published: article.published,
         })
       }
@@ -119,7 +121,9 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
         toast.success(formData.published ? 'Article unpublished' : 'Article published successfully!')
         router.refresh()
       } else {
-        toast.error('Failed to publish article')
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Publish error:', { status: response.status, statusText: response.statusText, errorData })
+        toast.error(errorData.error || `Failed to publish article (${response.status})`)
       }
     } catch (error) {
       toast.error('Error publishing article')
@@ -224,6 +228,19 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="pseudonym">Pseudonym (optional)</Label>
+              <Input
+                id="pseudonym"
+                placeholder="Leave empty to use your real name"
+                value={formData.pseudonym}
+                onChange={(e) => setFormData({ ...formData, pseudonym: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground">
+                If provided, this name will be displayed instead of your real name on the published article.
+              </p>
             </div>
 
             <div className="space-y-2">

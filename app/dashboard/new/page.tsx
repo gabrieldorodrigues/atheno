@@ -31,6 +31,7 @@ export default function NewArticlePage() {
     abstract: "",
     content: "",
     tags: "",
+    pseudonym: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -121,6 +122,21 @@ export default function NewArticlePage() {
                   setFormData({ ...formData, tags: e.target.value })
                 }
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="pseudonym">Pseudonym (optional)</Label>
+              <Input
+                id="pseudonym"
+                placeholder="Leave empty to use your real name"
+                value={formData.pseudonym}
+                onChange={(e) =>
+                  setFormData({ ...formData, pseudonym: e.target.value })
+                }
+              />
+              <p className="text-xs text-muted-foreground">
+                If provided, this name will be displayed instead of your real name on the published article.
+              </p>
             </div>
 
             <div className="space-y-2">

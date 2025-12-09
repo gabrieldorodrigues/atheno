@@ -21,6 +21,7 @@ interface Article {
   slug: string;
   abstract: string;
   tags: string[];
+  pseudonym?: string;
   createdAt: string;
   author: {
     name: string;
@@ -152,66 +153,74 @@ export default function ArticlesPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {filteredArticles.map((article) => (
-              <Card
-                key={article.id}
-                className="hover:shadow-lg transition-shadow overflow-hidden flex flex-col"
-              >
+              <div key={article.id} className="group relative">
                 <Link href={`/article/${article.slug}`}>
-                  <div className="w-full h-48 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-primary/20">
-                      {article.title.charAt(0).toUpperCase()}
-                    </span>
+                  <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105">
+                    {/* Capa do livro */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-6 flex flex-col justify-between">
+                      {/* Título na capa */}
+                      <div className="flex-1 flex items-center justify-center">
+                        <h3 className="text-white font-serif font-bold text-lg md:text-xl text-center leading-tight line-clamp-6">
+                          {article.title}
+                        </h3>
+                      </div>
+                      
+                      {/* Autor na parte inferior */}
+                      <div className="text-white/80 text-xs md:text-sm text-center font-serif">
+                        {article.pseudonym || article.author.name}
+                      </div>
+                    </div>
+                    
+                    {/* Efeito de borda do livro */}
+                    <div className="absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-black/20 to-transparent"></div>
                   </div>
                 </Link>
-                <CardHeader className="flex-grow">
-                  <Link href={`/article/${article.slug}`}>
-                    <CardTitle className="text-xl hover:text-primary transition-colors cursor-pointer line-clamp-2">
-                      {article.title}
-                    </CardTitle>
-                  </Link>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
-                    <div className="flex items-center gap-1">
-                      <User className="h-3 w-3" />
-                      <span className="truncate">{article.author.name}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      <span>
-                        {new Date(article.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </span>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <CardDescription className="text-sm mb-4 line-clamp-3">
-                    {article.abstract}
-                  </CardDescription>
-                  <div className="flex gap-2 flex-wrap mb-4">
-                    {article.tags.slice(0, 3).map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="secondary"
-                        className="cursor-pointer text-xs"
-                        onClick={() => setSelectedTag(tag)}
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                    {article.tags.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{article.tags.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                  <Link href={`/article/${article.slug}`}>
-                    <Button variant="outline" size="sm" className="w-full">
-                      Read More
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+
+                {/* Card de informações ao hover */}
+                <div className="hidden group-hover:block absolute left-full top-0 ml-4 w-80 z-50 pointer-events-none">
+                  <Card className="shadow-xl pointer-events-auto">
+                    <CardHeader>
+                      <CardTitle className="text-lg line-clamp-3">
+                        {article.title}
+                      </CardTitle>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
+                        <div className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          <span>{article.pseudonym || article.author.name}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          <span>
+                            {new Date(article.createdAt).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric' 
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-sm mb-4 line-clamp-4">
+                        {article.abstract}
+                      </CardDescription>
+                      <div className="flex gap-2 flex-wrap">
+                        {article.tags.map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
             ))}
           </div>
         )}

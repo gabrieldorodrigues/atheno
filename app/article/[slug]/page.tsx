@@ -37,6 +37,8 @@ export default async function ArticlePage({
     notFound();
   }
 
+  const displayName = article.pseudonym || article.author.name;
+
   return (
     <div className="min-h-screen">
       <Header showBrowse />
@@ -49,7 +51,7 @@ export default async function ArticlePage({
             <div className="flex items-center gap-4 text-muted-foreground mb-6">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span>{article.author.name}</span>
+                <span>{displayName}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />

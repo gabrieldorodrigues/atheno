@@ -71,7 +71,7 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
-    const { title, abstract, content, tags, published } = body;
+    const { title, abstract, content, tags, published, pseudonym } = body;
 
     // Get user
     const user = await prisma.user.findUnique({
@@ -108,17 +108,16 @@ export async function PATCH(
     if (abstract !== undefined) updateData.abstract = abstract;
     if (content !== undefined) updateData.content = content;
     if (tags !== undefined) updateData.tags = Array.isArray(tags) ? tags : [];
+    if (pseudonym !== undefined) updateData.pseudonym = pseudonym || null;
     
     // Check if user has permission to publish
-    if (published !== undefined && published === true) {
-      if (!user.canPublish) {
+    if (published !== undefined) {
+      if (published === true && !user.canPublish) {
         return NextResponse.json(
           { error: "You don't have permission to publish articles" },
           { status: 403 }
         );
       }
-      updateData.published = published;
-    } else if (published !== undefined) {
       updateData.published = published;
     }
 
@@ -128,10 +127,10 @@ export async function PATCH(
     });
 
     return NextResponse.json(article);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating article:", error);
     return NextResponse.json(
-      { error: "Failed to update article" },
+      { error: error?.message || "Failed to update article" },
       { status: 500 }
     );
   }
