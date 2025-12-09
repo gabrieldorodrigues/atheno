@@ -9,8 +9,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { Calendar, User } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Header } from "@/components/header";
 
 export default async function ArticlePage({
   params,
@@ -40,16 +39,7 @@ export default async function ArticlePage({
 
   return (
     <div className="min-h-screen">
-      <nav className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Scientific Articles
-          </Link>
-          <Link href="/articles">
-            <Button variant="ghost">Browse Articles</Button>
-          </Link>
-        </div>
-      </nav>
+      <Header showBrowse />
 
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <article>

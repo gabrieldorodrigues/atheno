@@ -21,7 +21,7 @@ const merriweather = Merriweather({
 });
 
 export const metadata: Metadata = {
-  title: "Scientific Articles Platform",
+  title: "Atheno",
   description: "Platform for creating and publishing scientific articles",
 };
 

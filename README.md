@@ -1,4 +1,4 @@
-# Scientific Articles Platform
+# Atheno
 
 A modern platform for creating and publishing scientific articles built with Next.js, Clerk, Prisma, and PostgreSQL.
 

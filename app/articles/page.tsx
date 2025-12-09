@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, Calendar, User } from "lucide-react";
+import { Header } from "@/components/header";
 
 interface Article {
   id: string;
@@ -85,21 +86,21 @@ export default function ArticlesPage() {
 
   return (
     <div className="min-h-screen">
-      <nav className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            Scientific Articles
-          </Link>
-          <div className="flex gap-4">
-            <Link href="/sign-in">
-              <Button variant="outline">Sign In</Button>
-            </Link>
-            <Link href="/sign-up">
-              <Button>Get Started</Button>
-            </Link>
+      <Header 
+        showAuth 
+        centerContent={
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search by title, abstract, or tags..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 w-full"
+            />
           </div>
-        </div>
-      </nav>
+        }
+      />
 
       <div className="container mx-auto px-4 py-12">
         <div className="mb-8">
@@ -107,19 +108,6 @@ export default function ArticlesPage() {
           <p className="text-muted-foreground text-lg">
             Explore published scientific articles from our community
           </p>
-        </div>
-
-        <div className="mb-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search by title, abstract, or tags..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
         </div>
 
         {allTags.length > 0 && (

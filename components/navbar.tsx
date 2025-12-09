@@ -7,8 +7,8 @@ export function Navbar() {
     <nav className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-xl font-bold">
-            Scientific Articles
+          <Link href="/" className="text-xl font-bold font-serif">
+            Atheno
           </Link>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/articles">
