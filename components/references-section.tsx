@@ -20,7 +20,7 @@ export function ReferencesSection({ references }: { references: string }) {
           <ChevronDown className="h-6 w-6" />
         )}
       </button>
-      
+
       {isOpen && (
         <Card className="bg-muted/30">
           <CardContent className="pt-6">

@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Search, Calendar, User } from "lucide-react";
 import { Header } from "@/components/header";
+import { ArticleCover } from "@/components/article-cover";
 
 interface Article {
   id: string;
@@ -157,24 +158,8 @@ export default function ArticlesPage() {
             {filteredArticles.map((article) => (
               <div key={article.id} className="group relative">
                 <Link href={`/article/${article.slug}`}>
-                  <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105">
-                    {/* Capa do livro */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-6 flex flex-col justify-between">
-                      {/* Título na capa */}
-                      <div className="flex-1 flex items-center justify-center">
-                        <h3 className="text-white font-serif font-bold text-lg md:text-xl text-center leading-tight line-clamp-6">
-                          {article.title}
-                        </h3>
-                      </div>
-
-                      {/* Autor na parte inferior */}
-                      <div className="text-white/80 text-xs md:text-sm text-center font-serif">
-                        {article.pseudonym || article.author.name}
-                      </div>
-                    </div>
-
-                    {/* Efeito de borda do livro */}
-                    <div className="absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-black/20 to-transparent"></div>
+                  <div className="transition-all duration-300 group-hover:scale-105">
+                    <ArticleCover title={article.title} />
                   </div>
                 </Link>
 

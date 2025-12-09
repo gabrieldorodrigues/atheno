@@ -11,6 +11,7 @@ import "katex/dist/katex.min.css";
 import { Calendar, User } from "lucide-react";
 import { Header } from "@/components/header";
 import { ReferencesSection } from "@/components/references-section";
+import { ArticleCover } from "@/components/article-cover";
 
 export default async function ArticlePage({
   params,
@@ -74,16 +75,22 @@ export default async function ArticlePage({
               ))}
             </div>
 
-            <Card className="bg-muted/50">
-              <CardHeader>
-                <h2 className="text-lg font-semibold">Abstract</h2>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
-                  {article.abstract}
-                </p>
-              </CardContent>
-            </Card>
+            <div className="flex gap-6 items-start">
+              <div className="w-48 flex-shrink-0">
+                <ArticleCover title={article.title} />
+              </div>
+
+              <Card className="bg-muted/50 flex-1">
+                <CardHeader>
+                  <h2 className="text-lg font-semibold">Abstract</h2>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {article.abstract}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </header>
 
           <Separator className="mb-8" />

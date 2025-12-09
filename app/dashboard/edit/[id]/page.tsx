@@ -103,13 +103,13 @@ export default function EditArticlePage({
       });
 
       if (response.ok) {
-        toast.success("Article saved successfully!");
+        toast.success("Article updated successfully!");
         router.refresh();
       } else {
-        toast.error("Failed to save article");
+        toast.error("Failed to update article");
       }
     } catch (error) {
-      toast.error("Error saving article");
+      toast.error("Error updating article");
     } finally {
       setIsSaving(false);
     }
@@ -335,7 +335,7 @@ export default function EditArticlePage({
             <div className="flex gap-4">
               <Button type="submit" disabled={isSaving}>
                 <Save className="mr-2 h-4 w-4" />
-                {isSaving ? "Saving..." : "Save"}
+                {isSaving ? "Updating..." : "Update"}
               </Button>
               <Button
                 type="button"
