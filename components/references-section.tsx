@@ -8,7 +8,7 @@ export function ReferencesSection({ references }: { references: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="mb-8">
+    <section className="mb-8" data-references-section>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-2xl font-bold mb-4 hover:text-primary transition-colors"

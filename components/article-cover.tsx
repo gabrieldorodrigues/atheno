@@ -7,6 +7,7 @@ export interface CoverStyle {
   grayscale?: number;
   brightness?: number;
   grain?: number;
+  showTitle?: boolean;
 }
 
 export function ArticleCover({
@@ -76,11 +77,13 @@ export function ArticleCover({
           }}
         />
       )}
-      <div className="absolute inset-0 h-full p-6 flex items-center justify-center text-white">
-        <h3 className="font-serif text-xl font-bold leading-tight text-center drop-shadow-lg">
-          {title}
-        </h3>
-      </div>
+      {(coverStyle?.showTitle !== false) && (
+        <div className="absolute inset-0 h-full p-6 flex items-center justify-center text-white">
+          <h3 className="font-serif text-xl font-bold leading-tight text-center drop-shadow-lg">
+            {title}
+          </h3>
+        </div>
+      )}
     </div>
   );
 }

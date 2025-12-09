@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export default function DashboardLayout({
   children,
@@ -7,8 +7,10 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
-      {children}
+      <AppSidebar />
+      <main className="ml-64 transition-all duration-300 p-8">
+        {children}
+      </main>
     </div>
   );
 }

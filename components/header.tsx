@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { ReactNode } from "react";
 
 interface HeaderProps {
@@ -33,6 +34,7 @@ export function Header({
               <Button variant="outline">Sign In to Publish</Button>
             </Link>
           )}
+          <ThemeToggle />
         </div>
       </div>
     </nav>

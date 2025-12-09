@@ -334,7 +334,7 @@ export default function EditArticlePage({
                       />
                     </TabsContent>
                     <TabsContent value="preview" className="mt-4">
-                      <div className="min-h-[500px] border rounded-lg p-6 prose prose-slate max-w-none">
+                      <div className="min-h-[500px] border rounded-lg p-6 prose dark:prose-invert max-w-none">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm, remarkMath]}
                           rehypePlugins={[rehypeKatex]}

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArticleCover } from "@/components/article-cover";
 import { Upload } from "lucide-react";
@@ -20,6 +21,8 @@ export interface CoverStyle {
   grayscale?: number;
   brightness?: number;
   grain?: number;
+  // Display options
+  showTitle?: boolean;
 }
 
 interface CoverCustomizerProps {
@@ -47,6 +50,7 @@ export function CoverCustomizer({
       type: "gradient",
       color1: "#3b82f6",
       color2: "#1e40af",
+      showTitle: true,
     }
   );
 
@@ -60,12 +64,13 @@ export function CoverCustomizer({
       const reader = new FileReader();
       reader.onloadend = () => {
         setLocalStyle({
+          ...localStyle,
           type: "image",
           imageUrl: reader.result as string,
-          blur: 0,
-          grayscale: 0,
-          brightness: 100,
-          grain: 0,
+          blur: localStyle.type === "image" ? localStyle.blur : 0,
+          grayscale: localStyle.type === "image" ? localStyle.grayscale : 0,
+          brightness: localStyle.type === "image" ? localStyle.brightness : 100,
+          grain: localStyle.type === "image" ? localStyle.grain : 0,
         });
       };
       reader.readAsDataURL(file);
@@ -81,6 +86,17 @@ export function CoverCustomizer({
         {/* Preview */}
         <div className="w-full max-w-[200px] mx-auto">
           <ArticleCover title={title} coverStyle={localStyle} />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <Label htmlFor="show-title">Show title on cover</Label>
+          <Switch
+            id="show-title"
+            checked={localStyle.showTitle !== false}
+            onCheckedChange={(checked) =>
+              setLocalStyle({ ...localStyle, showTitle: checked })
+            }
+          />
         </div>
 
         <Tabs
