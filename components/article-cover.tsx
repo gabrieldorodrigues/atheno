@@ -77,7 +77,7 @@ export function ArticleCover({
           }}
         />
       )}
-      {(coverStyle?.showTitle !== false) && (
+      {coverStyle?.showTitle !== false && (
         <div className="absolute inset-0 h-full p-6 flex items-center justify-center text-white">
           <h3 className="font-serif text-xl font-bold leading-tight text-center drop-shadow-lg">
             {title}

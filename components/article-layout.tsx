@@ -9,7 +9,11 @@ interface ArticleLayoutProps {
   children: React.ReactNode;
 }
 
-export function ArticleLayout({ content, hasReferences, children }: ArticleLayoutProps) {
+export function ArticleLayout({
+  content,
+  hasReferences,
+  children,
+}: ArticleLayoutProps) {
   const [isTocCollapsed, setIsTocCollapsed] = useState(true);
 
   return (
@@ -17,7 +21,7 @@ export function ArticleLayout({ content, hasReferences, children }: ArticleLayou
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
         {/* Table of Contents - Left Sidebar */}
         <aside className="hidden lg:block lg:col-span-3">
-          <TableOfContents 
+          <TableOfContents
             content={content}
             hasReferences={hasReferences}
             onCollapseChange={setIsTocCollapsed}
@@ -25,7 +29,11 @@ export function ArticleLayout({ content, hasReferences, children }: ArticleLayou
         </aside>
 
         {/* Main Content */}
-        <div className={isTocCollapsed ? "lg:col-span-9 lg:col-start-3" : "lg:col-span-9"}>
+        <div
+          className={
+            isTocCollapsed ? "lg:col-span-9 lg:col-start-3" : "lg:col-span-9"
+          }
+        >
           {children}
         </div>
       </div>

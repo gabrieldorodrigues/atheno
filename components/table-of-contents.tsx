@@ -16,7 +16,11 @@ interface TableOfContentsProps {
   onCollapseChange?: (isCollapsed: boolean) => void;
 }
 
-export function TableOfContents({ content, hasReferences, onCollapseChange }: TableOfContentsProps) {
+export function TableOfContents({
+  content,
+  hasReferences,
+  onCollapseChange,
+}: TableOfContentsProps) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -30,7 +34,7 @@ export function TableOfContents({ content, hasReferences, onCollapseChange }: Ta
     // Extract headings from markdown content
     const headingRegex = /^(#{2,3})\s+(.+)$/gm;
     const matches = Array.from(content.matchAll(headingRegex));
-    
+
     const extractedHeadings: Heading[] = matches.map((match, index) => {
       const level = match[1].length;
       const text = match[2].trim();
@@ -42,7 +46,9 @@ export function TableOfContents({ content, hasReferences, onCollapseChange }: Ta
 
     // Add IDs to actual headings in the DOM
     const timer = setTimeout(() => {
-      const articleHeadings = document.querySelectorAll("article h2, article h3");
+      const articleHeadings = document.querySelectorAll(
+        "article h2, article h3"
+      );
       articleHeadings.forEach((heading, index) => {
         heading.id = `heading-${index}`;
       });
@@ -94,7 +100,9 @@ export function TableOfContents({ content, hasReferences, onCollapseChange }: Ta
   };
 
   const scrollToReferences = () => {
-    const referencesElement = document.querySelector('[data-references-section]');
+    const referencesElement = document.querySelector(
+      "[data-references-section]"
+    );
     if (referencesElement) {
       const offset = 80;
       const elementPosition = referencesElement.getBoundingClientRect().top;
@@ -121,7 +129,9 @@ export function TableOfContents({ content, hasReferences, onCollapseChange }: Ta
       ) : (
         <Card className="sticky top-4 shadow-none border-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="text-sm font-semibold">Table of Contents</CardTitle>
+            <CardTitle className="text-sm font-semibold">
+              Table of Contents
+            </CardTitle>
             <button
               onClick={() => handleToggleCollapse(true)}
               className="p-1 rounded-md hover:bg-muted transition-colors"

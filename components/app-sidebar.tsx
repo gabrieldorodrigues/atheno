@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { 
-  Home, 
-  FileText, 
-  PlusCircle, 
+import {
+  Home,
+  FileText,
+  PlusCircle,
   Search,
   ChevronLeft,
   ChevronRight,
-  Settings
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -74,13 +74,27 @@ export function AppSidebar() {
 
       {/* Footer */}
       <div className="p-4 border-t space-y-2">
-        <div className={cn("flex items-center gap-2", isCollapsed && "justify-center")}>
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            isCollapsed && "justify-center"
+          )}
+        >
           <ThemeToggle />
-          {!isCollapsed && <span className="text-sm text-muted-foreground">Theme</span>}
+          {!isCollapsed && (
+            <span className="text-sm text-muted-foreground">Theme</span>
+          )}
         </div>
-        <div className={cn("flex items-center gap-2", isCollapsed && "justify-center")}>
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            isCollapsed && "justify-center"
+          )}
+        >
           <UserButton afterSignOutUrl="/" />
-          {!isCollapsed && <span className="text-sm text-muted-foreground">Account</span>}
+          {!isCollapsed && (
+            <span className="text-sm text-muted-foreground">Account</span>
+          )}
         </div>
       </div>
     </div>

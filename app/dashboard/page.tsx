@@ -12,7 +12,14 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Eye, BarChart3, Calendar, TrendingUp, Clock } from "lucide-react";
+import {
+  FileText,
+  Eye,
+  BarChart3,
+  Calendar,
+  TrendingUp,
+  Clock,
+} from "lucide-react";
 import { ArticleCover } from "@/components/article-cover";
 
 export default async function DashboardPage() {
@@ -49,7 +56,8 @@ export default async function DashboardPage() {
   const publishedArticles = articles.filter((a) => a.published).length;
   const draftArticles = totalArticles - publishedArticles;
   const recentArticles = articles.filter(
-    (a) => new Date(a.updatedAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    (a) =>
+      new Date(a.updatedAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   ).length;
 
   // Get all unique tags
@@ -62,7 +70,8 @@ export default async function DashboardPage() {
         <p className="text-muted-foreground mt-2">
           Manage and publish your scientific articles
         </p>
-      </div>      {articles.length === 0 ? (
+      </div>{" "}
+      {articles.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
             <FileText className="h-16 w-16 text-muted-foreground mb-4" />
@@ -71,9 +80,7 @@ export default async function DashboardPage() {
               Start creating your first scientific article
             </p>
             <Link href="/dashboard/new">
-              <Button>
-                Create Article
-              </Button>
+              <Button>Create Article</Button>
             </Link>
           </CardContent>
         </Card>
@@ -95,34 +102,26 @@ export default async function DashboardPage() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Published
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Published</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{publishedArticles}</div>
-                <p className="text-xs text-muted-foreground">
-                  Live articles
-                </p>
+                <p className="text-xs text-muted-foreground">Live articles</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Drafts
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Drafts</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{draftArticles}</div>
-                <p className="text-xs text-muted-foreground">
-                  In progress
-                </p>
+                <p className="text-xs text-muted-foreground">In progress</p>
               </CardContent>
             </Card>
 
@@ -135,9 +134,7 @@ export default async function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{recentArticles}</div>
-                <p className="text-xs text-muted-foreground">
-                  Last 7 days
-                </p>
+                <p className="text-xs text-muted-foreground">Last 7 days</p>
               </CardContent>
             </Card>
           </div>
@@ -146,7 +143,9 @@ export default async function DashboardPage() {
           <Tabs defaultValue="all" className="w-full">
             <TabsList className="grid w-full max-w-md grid-cols-3">
               <TabsTrigger value="all">All ({totalArticles})</TabsTrigger>
-              <TabsTrigger value="published">Published ({publishedArticles})</TabsTrigger>
+              <TabsTrigger value="published">
+                Published ({publishedArticles})
+              </TabsTrigger>
               <TabsTrigger value="drafts">Drafts ({draftArticles})</TabsTrigger>
             </TabsList>
 
@@ -168,13 +167,17 @@ export default async function DashboardPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2 mb-2">
                           <Badge
-                            variant={article.published ? "default" : "secondary"}
+                            variant={
+                              article.published ? "default" : "secondary"
+                            }
                             className="text-xs"
                           >
                             {article.published ? "Published" : "Draft"}
                           </Badge>
                         </div>
-                        <CardTitle className="text-base line-clamp-2 leading-tight">{article.title}</CardTitle>
+                        <CardTitle className="text-base line-clamp-2 leading-tight">
+                          {article.title}
+                        </CardTitle>
                         <CardDescription className="line-clamp-3 text-xs mt-2">
                           {article.abstract}
                         </CardDescription>
@@ -182,15 +185,29 @@ export default async function DashboardPage() {
                       <CardContent>
                         <div className="flex flex-col gap-2">
                           {article.published && (
-                            <Link href={`/article/${article.slug}`} className="w-full">
-                              <Button variant="default" size="sm" className="w-full">
+                            <Link
+                              href={`/article/${article.slug}`}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="default"
+                                size="sm"
+                                className="w-full"
+                              >
                                 <Eye className="mr-2 h-3 w-3" />
                                 View
                               </Button>
                             </Link>
                           )}
-                          <Link href={`/dashboard/edit/${article.id}`} className="w-full">
-                            <Button variant="outline" size="sm" className="w-full">
+                          <Link
+                            href={`/dashboard/edit/${article.id}`}
+                            className="w-full"
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full"
+                            >
                               Edit
                             </Button>
                           </Link>
@@ -207,91 +224,124 @@ export default async function DashboardPage() {
 
             <TabsContent value="published" className="mt-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {articles.filter((a) => a.published).map((article) => (
-                  <div key={article.id} className="flex flex-col gap-3">
-                    <div className="aspect-[2/3] w-full rounded-lg overflow-hidden shadow-md">
-                      <ArticleCover
-                        title={article.title}
-                        coverStyle={
-                          (article as any).coverStyle
-                            ? JSON.parse((article as any).coverStyle)
-                            : null
-                        }
-                      />
+                {articles
+                  .filter((a) => a.published)
+                  .map((article) => (
+                    <div key={article.id} className="flex flex-col gap-3">
+                      <div className="aspect-[2/3] w-full rounded-lg overflow-hidden shadow-md">
+                        <ArticleCover
+                          title={article.title}
+                          coverStyle={
+                            (article as any).coverStyle
+                              ? JSON.parse((article as any).coverStyle)
+                              : null
+                          }
+                        />
+                      </div>
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="default" className="text-xs">
+                              Published
+                            </Badge>
+                          </div>
+                          <CardTitle className="text-base line-clamp-2 leading-tight">
+                            {article.title}
+                          </CardTitle>
+                          <CardDescription className="line-clamp-3 text-xs mt-2">
+                            {article.abstract}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex flex-col gap-2">
+                            <Link
+                              href={`/article/${article.slug}`}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="default"
+                                size="sm"
+                                className="w-full"
+                              >
+                                <Eye className="mr-2 h-3 w-3" />
+                                View
+                              </Button>
+                            </Link>
+                            <Link
+                              href={`/dashboard/edit/${article.id}`}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full"
+                              >
+                                Edit
+                              </Button>
+                            </Link>
+                            <span className="text-xs text-muted-foreground text-center mt-1">
+                              {new Date(article.updatedAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="default" className="text-xs">Published</Badge>
-                        </div>
-                        <CardTitle className="text-base line-clamp-2 leading-tight">{article.title}</CardTitle>
-                        <CardDescription className="line-clamp-3 text-xs mt-2">
-                          {article.abstract}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-col gap-2">
-                          <Link href={`/article/${article.slug}`} className="w-full">
-                            <Button variant="default" size="sm" className="w-full">
-                              <Eye className="mr-2 h-3 w-3" />
-                              View
-                            </Button>
-                          </Link>
-                          <Link href={`/dashboard/edit/${article.id}`} className="w-full">
-                            <Button variant="outline" size="sm" className="w-full">
-                              Edit
-                            </Button>
-                          </Link>
-                          <span className="text-xs text-muted-foreground text-center mt-1">
-                            {new Date(article.updatedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
+                  ))}
               </div>
             </TabsContent>
 
             <TabsContent value="drafts" className="mt-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {articles.filter((a) => !a.published).map((article) => (
-                  <div key={article.id} className="flex flex-col gap-3">
-                    <div className="aspect-[2/3] w-full rounded-lg overflow-hidden shadow-md">
-                      <ArticleCover
-                        title={article.title}
-                        coverStyle={
-                          (article as any).coverStyle
-                            ? JSON.parse((article as any).coverStyle)
-                            : null
-                        }
-                      />
+                {articles
+                  .filter((a) => !a.published)
+                  .map((article) => (
+                    <div key={article.id} className="flex flex-col gap-3">
+                      <div className="aspect-[2/3] w-full rounded-lg overflow-hidden shadow-md">
+                        <ArticleCover
+                          title={article.title}
+                          coverStyle={
+                            (article as any).coverStyle
+                              ? JSON.parse((article as any).coverStyle)
+                              : null
+                          }
+                        />
+                      </div>
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="secondary" className="text-xs">
+                              Draft
+                            </Badge>
+                          </div>
+                          <CardTitle className="text-base line-clamp-2 leading-tight">
+                            {article.title}
+                          </CardTitle>
+                          <CardDescription className="line-clamp-3 text-xs mt-2">
+                            {article.abstract}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex flex-col gap-2">
+                            <Link
+                              href={`/dashboard/edit/${article.id}`}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full"
+                              >
+                                Edit
+                              </Button>
+                            </Link>
+                            <span className="text-xs text-muted-foreground text-center mt-1">
+                              {new Date(article.updatedAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="secondary" className="text-xs">Draft</Badge>
-                        </div>
-                        <CardTitle className="text-base line-clamp-2 leading-tight">{article.title}</CardTitle>
-                        <CardDescription className="line-clamp-3 text-xs mt-2">
-                          {article.abstract}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-col gap-2">
-                          <Link href={`/dashboard/edit/${article.id}`} className="w-full">
-                            <Button variant="outline" size="sm" className="w-full">
-                              Edit
-                            </Button>
-                          </Link>
-                          <span className="text-xs text-muted-foreground text-center mt-1">
-                            {new Date(article.updatedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
+                  ))}
               </div>
             </TabsContent>
           </Tabs>
