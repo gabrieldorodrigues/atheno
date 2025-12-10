@@ -142,8 +142,8 @@ export default function NewArticlePage() {
                     }
                   />
                   <p className="text-xs text-muted-foreground">
-                    If provided, this name will be displayed instead of your real
-                    name on the published article.
+                    If provided, this name will be displayed instead of your
+                    real name on the published article.
                   </p>
                 </div>
 
