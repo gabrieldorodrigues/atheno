@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Calendar, User } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import { Header } from "@/components/header";
 import { ArticleCover } from "@/components/article-cover";
 
@@ -31,6 +31,7 @@ interface Article {
 }
 
 export default function ArticlesPage() {
+  const searchParams = useSearchParams();
   const [articles, setArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,7 +40,12 @@ export default function ArticlesPage() {
 
   useEffect(() => {
     fetchArticles();
-  }, []);
+    // Set initial search query from URL
+    const urlSearch = searchParams.get("search");
+    if (urlSearch) {
+      setSearchQuery(urlSearch);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     filterArticles();
@@ -88,21 +94,7 @@ export default function ArticlesPage() {
 
   return (
     <div className="min-h-screen">
-      <Header
-        showAuth
-        centerContent={
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search by title, abstract, or tags..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-full"
-            />
-          </div>
-        }
-      />
+      <Header showAuth showSearch />
 
       <div className="container mx-auto px-4 py-12">
         <div className="mb-8">

@@ -6,7 +6,7 @@ import { Header } from "@/components/header";
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <Header showAuth />
+      <Header showAuth showSearch />
 
       <main className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">

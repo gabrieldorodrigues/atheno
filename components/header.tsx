@@ -5,16 +5,19 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { ReactNode } from "react";
+import { SearchBar } from "@/components/search-bar";
 
 interface HeaderProps {
   showAuth?: boolean;
   showBrowse?: boolean;
+  showSearch?: boolean;
   centerContent?: ReactNode;
 }
 
 export function Header({
   showAuth = false,
   showBrowse = false,
+  showSearch = false,
   centerContent,
 }: HeaderProps) {
   const { isSignedIn, isLoaded } = useUser();
@@ -27,6 +30,11 @@ export function Header({
         </Link>
         {centerContent && (
           <div className="flex-1 max-w-2xl">{centerContent}</div>
+        )}
+        {!centerContent && showSearch && isSignedIn && (
+          <div className="flex-1 max-w-2xl">
+            <SearchBar />
+          </div>
         )}
         <div className="flex gap-4 shrink-0 items-center">
           {showBrowse && (
