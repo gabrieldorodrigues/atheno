@@ -33,7 +33,7 @@ export async function GET(
     return NextResponse.json(article);
   } catch (error) {
     console.error("Error fetching article:", error);
-    
+
     if (error instanceof Error) {
       if (error.message === "Article not found") {
         return NextResponse.json(
@@ -48,7 +48,7 @@ export async function GET(
         );
       }
     }
-    
+
     return NextResponse.json(
       { error: ERROR_MESSAGES.FETCH_FAILED },
       { status: 500 }
@@ -125,7 +125,7 @@ export async function PATCH(
     return NextResponse.json(article);
   } catch (error) {
     console.error("Error updating article:", error);
-    
+
     if (error instanceof Error) {
       if (error.message === "Article not found") {
         return NextResponse.json(
@@ -141,7 +141,7 @@ export async function PATCH(
       }
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-    
+
     return NextResponse.json(
       { error: ERROR_MESSAGES.UPDATE_FAILED },
       { status: 500 }
@@ -180,7 +180,7 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting article:", error);
-    
+
     if (error instanceof Error) {
       if (error.message === "Article not found") {
         return NextResponse.json(
@@ -195,7 +195,7 @@ export async function DELETE(
         );
       }
     }
-    
+
     return NextResponse.json(
       { error: ERROR_MESSAGES.DELETE_FAILED },
       { status: 500 }

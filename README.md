@@ -1,6 +1,8 @@
 <div align="center">
 
-# <span style="font-family: 'Merriweather', serif;">Atheno</span>
+<img src="public/favicon.svg" alt="Atheno Logo" width="100" height="100">
+
+# Atheno
 
 A modern platform for creating and publishing scientific articles with support for mathematical notation, rich markdown editing, and collaborative features.
 
@@ -8,11 +10,11 @@ A modern platform for creating and publishing scientific articles with support f
 
 </div>
 
-## <span style="font-family: 'Merriweather', serif;">Overview</span>
+## Overview
 
 Atheno is a full-stack web application designed for researchers, academics, and scientific writers who need a streamlined platform to compose, manage, and publish technical articles. Built with modern web technologies, it provides a seamless writing experience with real-time preview, LaTeX math rendering, and customizable article covers.
 
-## <span style="font-family: 'Merriweather', serif;">Features</span>
+## Features
 
 - **User Authentication**: Secure authentication system powered by Clerk
 - **Markdown Editor**: Write articles using Markdown with live preview
@@ -26,7 +28,7 @@ Atheno is a full-stack web application designed for researchers, academics, and 
 - **Responsive Design**: Mobile-first design that works on all devices
 
 <details>
-<summary><span style="font-family: 'Merriweather', serif;">Technology Stack</span></summary>
+<summary>Technology Stack</summary>
 
 | Category              | Technologies                                                           |
 | --------------------- | ---------------------------------------------------------------------- |
@@ -37,7 +39,7 @@ Atheno is a full-stack web application designed for researchers, academics, and 
 
 </details>
 
-## <span style="font-family: 'Merriweather', serif;">Prerequisites</span>
+## Prerequisites
 
 Before running this project, ensure you have the following installed:
 
@@ -46,9 +48,9 @@ Before running this project, ensure you have the following installed:
 - Supabase account (for PostgreSQL database)
 - Clerk account for authentication
 
-## <span style="font-family: 'Merriweather', serif;">Getting Started</span>
+## Getting Started
 
-### <span style="font-family: 'Merriweather', serif;">Installation</span>
+### Installation
 
 1. Clone the repository:
 
@@ -63,7 +65,7 @@ cd atheno
 npm install
 ```
 
-### <span style="font-family: 'Merriweather', serif;">Environment Configuration</span>
+### Environment Configuration
 
 Create a `.env.local` file in the root directory with the following variables:
 
@@ -91,7 +93,7 @@ DATABASE_URL="postgresql://user:password@host.supabase.co:5432/postgres"
 4. Copy the connection string (URI format)
 5. Add it to your `.env.local` file as `DATABASE_URL`
 
-### <span style="font-family: 'Merriweather', serif;">Database Setup</span>
+### Database Setup
 
 1. Generate Prisma Client:
 
@@ -111,7 +113,7 @@ npx prisma migrate dev
 npx prisma studio
 ```
 
-### <span style="font-family: 'Merriweather', serif;">Running the Application</span>
+### Running the Application
 
 Start the development server:
 
@@ -122,7 +124,7 @@ npm run dev
 The application will be available at [http://localhost:3000](http://localhost:3000).
 
 <details>
-<summary><span style="font-family: 'Merriweather', serif;">Project Structure</span></summary>
+<summary>Project Structure</summary>
 
 ```
 atheno/
@@ -142,9 +144,9 @@ atheno/
 
 </details>
 
-## <span style="font-family: 'Merriweather', serif;">Usage</span>
+## Usage
 
-### <span style="font-family: 'Merriweather', serif;">Creating an Article</span>
+### Creating an Article
 
 1. Sign up or sign in to your account
 2. Navigate to the Dashboard
@@ -154,7 +156,7 @@ atheno/
 6. Use the Preview tab to see the rendered output
 7. Save as draft or publish immediately
 
-### <span style="font-family: 'Merriweather', serif;">Markdown Support</span>
+### Markdown Support
 
 Atheno supports GitHub Flavored Markdown with additional features:
 
@@ -165,7 +167,7 @@ Atheno supports GitHub Flavored Markdown with additional features:
 - **Tables**: Full table support
 - **Math**: Inline `$equation$` or block `$$equation$$` using KaTeX
 
-### <span style="font-family: 'Merriweather', serif;">Customizing Article Covers</span>
+### Customizing Article Covers
 
 1. Edit an article
 2. Use the Cover Customizer panel on the right
@@ -174,7 +176,7 @@ Atheno supports GitHub Flavored Markdown with additional features:
 5. Toggle title visibility on the cover
 
 <details>
-<summary><span style="font-family: 'Merriweather', serif;">API Routes</span></summary>
+<summary>API Routes</summary>
 
 - `GET /api/articles` - Fetch all published articles
 - `GET /api/articles/:id` - Fetch a specific article
@@ -187,16 +189,16 @@ Atheno supports GitHub Flavored Markdown with additional features:
 </details>
 
 <details>
-<summary><span style="font-family: 'Merriweather', serif;">Deployment</span></summary>
+<summary>Deployment</summary>
 
-### <span style="font-family: 'Merriweather', serif;">Vercel</span>
+### Vercel
 
 1. Push your code to a Git repository
 2. Import the project in Vercel
 3. Configure environment variables in Vercel dashboard
 4. Deploy
 
-### <span style="font-family: 'Merriweather', serif;">Other Platforms</span>
+### Other Platforms
 
 The application can be deployed to any platform that supports Next.js applications (Railway, Render, AWS, etc.). Ensure you:
 
@@ -210,9 +212,9 @@ The application can be deployed to any platform that supports Next.js applicatio
 </details>
 
 <details>
-<summary><span style="font-family: 'Merriweather', serif;">Development</span></summary>
+<summary>Development</summary>
 
-### <span style="font-family: 'Merriweather', serif;">Available Scripts</span>
+### Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -225,15 +227,15 @@ The application can be deployed to any platform that supports Next.js applicatio
 
 </details>
 
-## <span style="font-family: 'Merriweather', serif;">Contributing</span>
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## <span style="font-family: 'Merriweather', serif;">License</span>
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## <span style="font-family: 'Merriweather', serif;">Acknowledgments</span>
+## Acknowledgments
 
 - Built with [Next.js](https://nextjs.org/)
 - UI components from [shadcn/ui](https://ui.shadcn.com)

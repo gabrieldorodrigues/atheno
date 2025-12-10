@@ -49,7 +49,9 @@ export default function EditArticlePage({
 }) {
   const [articleId, setArticleId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState<ArticleFormData & { published: boolean }>({
+  const [formData, setFormData] = useState<
+    ArticleFormData & { published: boolean }
+  >({
     title: "",
     abstract: "",
     content: "",
