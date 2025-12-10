@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User } from "lucide-react";
+import { Calendar, User, Search } from "lucide-react";
 import { Header } from "@/components/header";
 import { ArticleCover } from "@/components/article-cover";
 

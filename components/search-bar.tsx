@@ -103,7 +103,9 @@ export function SearchBar() {
         {!searchQuery && (
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
             <Search className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Search articles...</span>
+            <span className="text-sm text-muted-foreground">
+              Search articles...
+            </span>
           </div>
         )}
         <Input
