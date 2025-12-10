@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { ReactNode } from "react";
 
 interface HeaderProps {
@@ -14,6 +17,8 @@ export function Header({
   showBrowse = false,
   centerContent,
 }: HeaderProps) {
+  const { isSignedIn, isLoaded } = useUser();
+
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-8">
@@ -23,16 +28,19 @@ export function Header({
         {centerContent && (
           <div className="flex-1 max-w-2xl">{centerContent}</div>
         )}
-        <div className="flex gap-4 shrink-0">
+        <div className="flex gap-4 shrink-0 items-center">
           {showBrowse && (
             <Link href="/articles">
               <Button variant="ghost">Browse Articles</Button>
             </Link>
           )}
-          {showAuth && (
+          {showAuth && isLoaded && !isSignedIn && (
             <Link href="/sign-in">
               <Button variant="outline">Sign In to Publish</Button>
             </Link>
+          )}
+          {showAuth && isLoaded && isSignedIn && (
+            <UserButton afterSignOutUrl="/" />
           )}
           <ThemeToggle />
         </div>

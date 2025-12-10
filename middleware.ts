@@ -8,7 +8,16 @@ const isPublicRoute = createRouteMatcher([
   "/article/(.*)",
 ]);
 
+const isPublicApiRoute = createRouteMatcher([
+  "/api/articles",
+]);
+
 export default clerkMiddleware(async (auth, request) => {
+  // Allow public access to GET /api/articles
+  if (isPublicApiRoute(request) && request.method === "GET") {
+    return;
+  }
+  
   if (!isPublicRoute(request)) {
     await auth.protect();
   }

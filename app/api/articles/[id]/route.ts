@@ -122,14 +122,8 @@ export async function PATCH(
     if (tags !== undefined) updateData.tags = Array.isArray(tags) ? tags : [];
     if (pseudonym !== undefined) updateData.pseudonym = pseudonym || null;
 
-    // Check if user has permission to publish
+    // Allow publishing
     if (published !== undefined) {
-      if (published === true && !user.canPublish) {
-        return NextResponse.json(
-          { error: "You don't have permission to publish articles" },
-          { status: 403 }
-        );
-      }
       updateData.published = published;
     }
 
