@@ -2,9 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Search, FileText } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { ArticleCover } from "@/components/article-cover";
+import { safeJsonParse } from "@/lib/article-utils";
+import { CoverStyle } from "@/components/cover-customizer";
 
 interface Article {
   id: string;
@@ -16,6 +19,7 @@ interface Article {
     name: string;
   };
   pseudonym?: string;
+  coverStyle?: string;
 }
 
 export function SearchBar() {
@@ -115,46 +119,57 @@ export function SearchBar() {
             </div>
           ) : filteredArticles.length > 0 ? (
             <div className="divide-y">
-              {filteredArticles.map((article) => (
-                <Link
-                  key={article.id}
-                  href={`/article/${article.slug}`}
-                  onClick={() => {
-                    setShowPreview(false);
-                    setSearchQuery("");
-                  }}
-                  className="block p-4 hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    <FileText className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-sm mb-1 line-clamp-1">
-                        {highlightText(article.title, searchQuery)}
-                      </h4>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                        {highlightText(
-                          article.abstract.substring(0, 120) + "...",
-                          searchQuery
-                        )}
-                      </p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs text-muted-foreground">
-                          by {article.pseudonym || article.author.name}
-                        </span>
-                        {article.tags.slice(0, 3).map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {highlightText(tag, searchQuery)}
-                          </Badge>
-                        ))}
+              {filteredArticles.map((article) => {
+                const coverStyle = safeJsonParse<CoverStyle>(
+                  article.coverStyle || null
+                );
+                return (
+                  <Link
+                    key={article.id}
+                    href={`/article/${article.slug}`}
+                    onClick={() => {
+                      setShowPreview(false);
+                      setSearchQuery("");
+                    }}
+                    className="block p-4 hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-16 h-20 shrink-0 rounded overflow-hidden">
+                        <ArticleCover
+                          title={article.title}
+                          coverStyle={coverStyle}
+                          compact
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm mb-1 line-clamp-1">
+                          {highlightText(article.title, searchQuery)}
+                        </h4>
+                        <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                          {highlightText(
+                            article.abstract.substring(0, 100) + "...",
+                            searchQuery
+                          )}
+                        </p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs text-muted-foreground">
+                            by {article.pseudonym || article.author.name}
+                          </span>
+                          {article.tags.slice(0, 2).map((tag) => (
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-xs"
+                            >
+                              {highlightText(tag, searchQuery)}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
               <Link
                 href={`/articles?search=${encodeURIComponent(searchQuery)}`}
                 onClick={() => {

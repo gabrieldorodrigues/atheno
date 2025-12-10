@@ -13,9 +13,11 @@ export interface CoverStyle {
 export function ArticleCover({
   title,
   coverStyle,
+  compact = false,
 }: {
   title: string;
   coverStyle?: CoverStyle | null;
+  compact?: boolean;
 }) {
   // Default gradient based on title if no style provided
   const getDefaultGradient = () => {
@@ -77,7 +79,7 @@ export function ArticleCover({
           }}
         />
       )}
-      {coverStyle?.showTitle !== false && (
+      {coverStyle?.showTitle !== false && !compact && (
         <div className="absolute inset-0 h-full p-6 flex items-center justify-center text-white">
           <h3 className="font-serif text-xl font-bold leading-tight text-center drop-shadow-lg">
             {title}

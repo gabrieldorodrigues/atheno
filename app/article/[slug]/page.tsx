@@ -44,7 +44,7 @@ export default async function ArticlePage({
 
   return (
     <div className="min-h-screen">
-      <Header showBrowse />
+      <Header showBrowse showAuth showSearch />
 
       <ArticleLayout
         content={article.content}
