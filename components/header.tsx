@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import { SearchBar } from "@/components/search-bar";
+import { LayoutDashboard } from "lucide-react";
 
 interface HeaderProps {
   showAuth?: boolean;
@@ -37,7 +38,12 @@ export function Header({
           </div>
         )}
         <div className="flex gap-4 shrink-0 items-center">
-          {showBrowse && (
+          {isSignedIn && (
+            <Link href="/articles">
+              <Button variant="ghost">All Articles</Button>
+            </Link>
+          )}
+          {showBrowse && !isSignedIn && (
             <Link href="/articles">
               <Button variant="ghost">Browse Articles</Button>
             </Link>
@@ -48,7 +54,14 @@ export function Header({
             </Link>
           )}
           {showAuth && isLoaded && isSignedIn && (
-            <UserButton afterSignOutUrl="/" />
+            <>
+              <Link href="/dashboard">
+                <Button variant="ghost" size="icon" title="Dashboard">
+                  <LayoutDashboard className="h-5 w-5" />
+                </Button>
+              </Link>
+              <UserButton afterSignOutUrl="/" />
+            </>
           )}
           <ThemeToggle />
         </div>

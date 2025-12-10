@@ -99,15 +99,20 @@ export function SearchBar() {
 
   return (
     <div ref={searchRef} className="relative w-full">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className="relative flex items-center justify-center">
+        {!searchQuery && (
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+            <Search className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">Search articles...</span>
+          </div>
+        )}
         <Input
           type="text"
-          placeholder="Search articles..."
+          placeholder=""
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => searchQuery && setShowPreview(true)}
-          className="pl-9 pr-4"
+          className="text-center bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
         />
       </div>
 
