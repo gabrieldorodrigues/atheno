@@ -1,24 +1,17 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
-
-function generateSlug(title: string): string {
-  return (
-    title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .substring(0, 100) +
-    "-" +
-    Math.random().toString(36).substring(2, 9)
-  );
-}
+import { getOrCreateUser } from "@/lib/user-service";
+import { generateSlug, ERROR_MESSAGES } from "@/lib/article-utils";
 
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.UNAUTHORIZED },
+        { status: 401 }
+      );
     }
 
     const body = await request.json();
@@ -32,27 +25,7 @@ export async function POST(request: Request) {
       pseudonym,
     } = body;
 
-    // Get or create user
-    let user = await prisma.user.findUnique({
-      where: { clerkId: userId },
-    });
-
-    if (!user) {
-      const clerkUser = await (
-        await import("@clerk/nextjs/server")
-      ).currentUser();
-      if (!clerkUser) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
-      }
-
-      user = await prisma.user.create({
-        data: {
-          clerkId: userId,
-          email: clerkUser.emailAddresses[0].emailAddress,
-          name: clerkUser.fullName || clerkUser.username || "User",
-        },
-      });
-    }
+    const user = await getOrCreateUser(userId);
 
     // Create article
     const article = await prisma.article.create({
@@ -72,10 +45,9 @@ export async function POST(request: Request) {
     return NextResponse.json(article);
   } catch (error) {
     console.error("Error creating article:", error);
-    return NextResponse.json(
-      { error: "Failed to create article" },
-      { status: 500 }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : ERROR_MESSAGES.CREATE_FAILED;
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
@@ -97,9 +69,8 @@ export async function GET() {
     return NextResponse.json(articles);
   } catch (error) {
     console.error("Error fetching articles:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch articles" },
-      { status: 500 }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : ERROR_MESSAGES.FETCH_FAILED;
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

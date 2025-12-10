@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +22,13 @@ import { ArrowLeft, Save, Send, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { CoverCustomizer, CoverStyle } from "@/components/cover-customizer";
+import { ArticleFormData } from "@/lib/form-utils";
+import { safeJsonParse } from "@/lib/article-utils";
+import {
+  useUpdateArticle,
+  usePublishArticle,
+  useDeleteArticle,
+} from "@/hooks/use-article-actions";
 
 interface Article {
   id: string;
@@ -31,6 +37,9 @@ interface Article {
   content: string;
   tags: string[];
   published: boolean;
+  references?: string;
+  pseudonym?: string;
+  coverStyle?: string;
 }
 
 export default function EditArticlePage({
@@ -38,13 +47,9 @@ export default function EditArticlePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const router = useRouter();
   const [articleId, setArticleId] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ArticleFormData & { published: boolean }>({
     title: "",
     abstract: "",
     content: "",
@@ -54,6 +59,17 @@ export default function EditArticlePage({
     published: false,
   });
   const [coverStyle, setCoverStyle] = useState<CoverStyle | null>(null);
+
+  const { updateArticle, isSaving } = useUpdateArticle({
+    articleId: articleId || "",
+  });
+  const { togglePublish, isPublishing } = usePublishArticle({
+    articleId: articleId || "",
+    onSuccess: () => {
+      setFormData({ ...formData, published: !formData.published });
+    },
+  });
+  const { deleteArticle, isDeleting } = useDeleteArticle();
 
   useEffect(() => {
     params.then((resolvedParams) => {
@@ -71,18 +87,12 @@ export default function EditArticlePage({
           title: article.title,
           abstract: article.abstract,
           content: article.content,
-          references: (article as any).references || "",
+          references: article.references || "",
           tags: article.tags.join(", "),
-          pseudonym: (article as any).pseudonym || "",
+          pseudonym: article.pseudonym || "",
           published: article.published,
         });
-        if ((article as any).coverStyle) {
-          try {
-            setCoverStyle(JSON.parse((article as any).coverStyle));
-          } catch {
-            setCoverStyle(null);
-          }
-        }
+        setCoverStyle(safeJsonParse<CoverStyle>(article.coverStyle || null));
       }
     } catch (error) {
       console.error("Error fetching article:", error);
@@ -95,112 +105,17 @@ export default function EditArticlePage({
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!articleId) return;
-
-    setIsSaving(true);
-
-    try {
-      const response = await fetch(`/api/articles/${articleId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          coverStyle: coverStyle ? JSON.stringify(coverStyle) : null,
-          tags: formData.tags
-            .split(",")
-            .map((tag) => tag.trim())
-            .filter(Boolean),
-        }),
-      });
-
-      if (response.ok) {
-        toast.success("Article updated successfully!");
-        router.refresh();
-      } else {
-        toast.error("Failed to update article");
-      }
-    } catch (error) {
-      toast.error("Error updating article");
-    } finally {
-      setIsSaving(false);
-    }
+    await updateArticle(formData, coverStyle);
   };
 
   const handlePublish = async () => {
     if (!articleId) return;
-
-    setIsPublishing(true);
-
-    try {
-      const response = await fetch(`/api/articles/${articleId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          coverStyle: coverStyle ? JSON.stringify(coverStyle) : null,
-          tags: formData.tags
-            .split(",")
-            .map((tag) => tag.trim())
-            .filter(Boolean),
-          published: !formData.published,
-        }),
-      });
-
-      if (response.ok) {
-        setFormData({ ...formData, published: !formData.published });
-        toast.success(
-          formData.published
-            ? "Article unpublished"
-            : "Article published successfully!"
-        );
-        router.refresh();
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Publish error:", {
-          status: response.status,
-          statusText: response.statusText,
-          errorData,
-        });
-        toast.error(
-          errorData.error || `Failed to publish article (${response.status})`
-        );
-      }
-    } catch (error) {
-      toast.error("Error publishing article");
-    } finally {
-      setIsPublishing(false);
-    }
+    await togglePublish(formData, coverStyle);
   };
 
   const handleDelete = async () => {
     if (!articleId) return;
-
-    if (
-      !confirm(
-        "Are you sure you want to delete this article? This action cannot be undone."
-      )
-    ) {
-      return;
-    }
-
-    setIsDeleting(true);
-
-    try {
-      const response = await fetch(`/api/articles/${articleId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        toast.success("Article deleted successfully");
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        toast.error("Failed to delete article");
-      }
-    } catch (error) {
-      toast.error("Error deleting article");
-    } finally {
-      setIsDeleting(false);
-    }
+    await deleteArticle(articleId);
   };
 
   if (isLoading) {

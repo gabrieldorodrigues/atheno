@@ -1,18 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
-
-function generateSlug(title: string): string {
-  return (
-    title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .substring(0, 100) +
-    "-" +
-    Math.random().toString(36).substring(2, 9)
-  );
-}
+import { validateArticleOwnership, getOrCreateUser } from "@/lib/user-service";
+import { generateSlug, ERROR_MESSAGES } from "@/lib/article-utils";
 
 export async function GET(
   request: Request,
@@ -21,39 +11,46 @@ export async function GET(
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.UNAUTHORIZED },
+        { status: 401 }
+      );
     }
 
     const { id } = await params;
-
-    // Get user
     const user = await prisma.user.findUnique({
       where: { clerkId: userId },
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.USER_NOT_FOUND },
+        { status: 404 }
+      );
     }
 
-    // Get article
-    const article = await prisma.article.findUnique({
-      where: { id },
-    });
-
-    if (!article) {
-      return NextResponse.json({ error: "Article not found" }, { status: 404 });
-    }
-
-    // Check if user owns the article
-    if (article.authorId !== user.id) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
+    const article = await validateArticleOwnership(id, user.id);
     return NextResponse.json(article);
   } catch (error) {
     console.error("Error fetching article:", error);
+    
+    if (error instanceof Error) {
+      if (error.message === "Article not found") {
+        return NextResponse.json(
+          { error: ERROR_MESSAGES.ARTICLE_NOT_FOUND },
+          { status: 404 }
+        );
+      }
+      if (error.message === "Forbidden") {
+        return NextResponse.json(
+          { error: ERROR_MESSAGES.FORBIDDEN },
+          { status: 403 }
+        );
+      }
+    }
+    
     return NextResponse.json(
-      { error: "Failed to fetch article" },
+      { error: ERROR_MESSAGES.FETCH_FAILED },
       { status: 500 }
     );
   }
@@ -66,7 +63,10 @@ export async function PATCH(
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.UNAUTHORIZED },
+        { status: 401 }
+      );
     }
 
     const { id } = await params;
@@ -81,29 +81,19 @@ export async function PATCH(
       published,
       pseudonym,
     } = body;
-    body;
 
-    // Get user
     const user = await prisma.user.findUnique({
       where: { clerkId: userId },
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.USER_NOT_FOUND },
+        { status: 404 }
+      );
     }
 
-    // Check if article exists and belongs to user
-    const existingArticle = await prisma.article.findUnique({
-      where: { id },
-    });
-
-    if (!existingArticle) {
-      return NextResponse.json({ error: "Article not found" }, { status: 404 });
-    }
-
-    if (existingArticle.authorId !== user.id) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const existingArticle = await validateArticleOwnership(id, user.id);
 
     // Update article
     const updateData: any = {};
@@ -133,10 +123,27 @@ export async function PATCH(
     });
 
     return NextResponse.json(article);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error updating article:", error);
+    
+    if (error instanceof Error) {
+      if (error.message === "Article not found") {
+        return NextResponse.json(
+          { error: ERROR_MESSAGES.ARTICLE_NOT_FOUND },
+          { status: 404 }
+        );
+      }
+      if (error.message === "Forbidden") {
+        return NextResponse.json(
+          { error: ERROR_MESSAGES.FORBIDDEN },
+          { status: 403 }
+        );
+      }
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    
     return NextResponse.json(
-      { error: error?.message || "Failed to update article" },
+      { error: ERROR_MESSAGES.UPDATE_FAILED },
       { status: 500 }
     );
   }
@@ -149,43 +156,48 @@ export async function DELETE(
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.UNAUTHORIZED },
+        { status: 401 }
+      );
     }
 
     const { id } = await params;
-
-    // Get user
     const user = await prisma.user.findUnique({
       where: { clerkId: userId },
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.USER_NOT_FOUND },
+        { status: 404 }
+      );
     }
 
-    // Check if article exists and belongs to user
-    const article = await prisma.article.findUnique({
-      where: { id },
-    });
-
-    if (!article) {
-      return NextResponse.json({ error: "Article not found" }, { status: 404 });
-    }
-
-    if (article.authorId !== user.id) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    // Delete article
-    await prisma.article.delete({
-      where: { id },
-    });
+    await validateArticleOwnership(id, user.id);
+    await prisma.article.delete({ where: { id } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting article:", error);
+    
+    if (error instanceof Error) {
+      if (error.message === "Article not found") {
+        return NextResponse.json(
+          { error: ERROR_MESSAGES.ARTICLE_NOT_FOUND },
+          { status: 404 }
+        );
+      }
+      if (error.message === "Forbidden") {
+        return NextResponse.json(
+          { error: ERROR_MESSAGES.FORBIDDEN },
+          { status: 403 }
+        );
+      }
+    }
+    
     return NextResponse.json(
-      { error: "Failed to delete article" },
+      { error: ERROR_MESSAGES.DELETE_FAILED },
       { status: 500 }
     );
   }

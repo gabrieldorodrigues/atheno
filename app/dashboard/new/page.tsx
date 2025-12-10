@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,13 +20,13 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
 import { CoverCustomizer, CoverStyle } from "@/components/cover-customizer";
+import { ArticleFormData } from "@/lib/form-utils";
+import { useCreateArticle } from "@/hooks/use-article-actions";
 
 export default function NewArticlePage() {
-  const router = useRouter();
-  const [isSaving, setIsSaving] = useState(false);
-  const [formData, setFormData] = useState({
+  const { createArticle, isSaving } = useCreateArticle();
+  const [formData, setFormData] = useState<ArticleFormData>({
     title: "",
     abstract: "",
     content: "",
@@ -39,34 +38,7 @@ export default function NewArticlePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
-
-    try {
-      const response = await fetch("/api/articles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          coverStyle: coverStyle ? JSON.stringify(coverStyle) : null,
-          tags: formData.tags
-            .split(",")
-            .map((tag) => tag.trim())
-            .filter(Boolean),
-        }),
-      });
-
-      if (response.ok) {
-        toast.success("Article created successfully!");
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        toast.error("Failed to create article");
-      }
-    } catch (error) {
-      toast.error("Error creating article");
-    } finally {
-      setIsSaving(false);
-    }
+    await createArticle(formData, coverStyle);
   };
 
   return (
