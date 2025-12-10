@@ -1,12 +1,18 @@
-# Atheno
+<div align="center">
+
+# <span style="font-family: 'Merriweather', serif;">Atheno</span>
 
 A modern platform for creating and publishing scientific articles with support for mathematical notation, rich markdown editing, and collaborative features.
 
-## Overview
+[![Next.js](https://img.shields.io/badge/Next.js-16.0-black)](https://nextjs.org/) [![React](https://img.shields.io/badge/React-19.2-blue)](https://reactjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/) [![Prisma](https://img.shields.io/badge/Prisma-5.22-darkgreen)](https://www.prisma.io/) [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)](https://supabase.com/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-cyan)](https://tailwindcss.com/)
+
+</div>
+
+## <span style="font-family: 'Merriweather', serif;">Overview</span>
 
 Atheno is a full-stack web application designed for researchers, academics, and scientific writers who need a streamlined platform to compose, manage, and publish technical articles. Built with modern web technologies, it provides a seamless writing experience with real-time preview, LaTeX math rendering, and customizable article covers.
 
-## Features
+## <span style="font-family: 'Merriweather', serif;">Features</span>
 
 - **User Authentication**: Secure authentication system powered by Clerk
 - **Markdown Editor**: Write articles using Markdown with live preview
@@ -19,44 +25,30 @@ Atheno is a full-stack web application designed for researchers, academics, and 
 - **Search and Filtering**: Tag-based filtering and full-text search capabilities
 - **Responsive Design**: Mobile-first design that works on all devices
 
-## Technology Stack
+<details>
+<summary><span style="font-family: 'Merriweather', serif;">Technology Stack</span></summary>
 
-**Frontend**
+| Category              | Technologies                                                           |
+| --------------------- | ---------------------------------------------------------------------- |
+| **Frontend**          | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, shadcn/ui |
+| **Backend**           | Next.js API Routes, Prisma ORM, PostgreSQL (Supabase)                  |
+| **Authentication**    | Clerk                                                                  |
+| **Content Rendering** | react-markdown, KaTeX, remark-gfm                                      |
 
-- Next.js 16 (App Router)
-- React 19
-- TypeScript
-- Tailwind CSS
-- shadcn/ui components
+</details>
 
-**Backend**
-
-- Next.js API Routes
-- Prisma ORM
-- PostgreSQL database
-
-**Authentication**
-
-- Clerk
-
-**Content Rendering**
-
-- react-markdown
-- KaTeX for mathematical expressions
-- remark-gfm for GitHub Flavored Markdown
-
-## Prerequisites
+## <span style="font-family: 'Merriweather', serif;">Prerequisites</span>
 
 Before running this project, ensure you have the following installed:
 
 - Node.js 18.0 or higher
 - npm or yarn package manager
-- PostgreSQL database (local or hosted)
+- Supabase account (for PostgreSQL database)
 - Clerk account for authentication
 
-## Getting Started
+## <span style="font-family: 'Merriweather', serif;">Getting Started</span>
 
-### Installation
+### <span style="font-family: 'Merriweather', serif;">Installation</span>
 
 1. Clone the repository:
 
@@ -71,7 +63,7 @@ cd atheno
 npm install
 ```
 
-### Environment Configuration
+### <span style="font-family: 'Merriweather', serif;">Environment Configuration</span>
 
 Create a `.env.local` file in the root directory with the following variables:
 
@@ -80,8 +72,8 @@ Create a `.env.local` file in the root directory with the following variables:
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
 
-# Database Connection
-DATABASE_URL=""
+# Database Connection (Supabase PostgreSQL)
+DATABASE_URL="postgresql://user:password@host.supabase.co:5432/postgres"
 ```
 
 **Clerk Setup:**
@@ -91,7 +83,15 @@ DATABASE_URL=""
 3. Copy the API keys from your Clerk dashboard
 4. Add them to your `.env.local` file
 
-### Database Setup
+**Supabase Setup:**
+
+1. Create an account at [supabase.com](https://supabase.com)
+2. Create a new project
+3. Go to Project Settings > Database
+4. Copy the connection string (URI format)
+5. Add it to your `.env.local` file as `DATABASE_URL`
+
+### <span style="font-family: 'Merriweather', serif;">Database Setup</span>
 
 1. Generate Prisma Client:
 
@@ -111,7 +111,7 @@ npx prisma migrate dev
 npx prisma studio
 ```
 
-### Running the Application
+### <span style="font-family: 'Merriweather', serif;">Running the Application</span>
 
 Start the development server:
 
@@ -121,7 +121,8 @@ npm run dev
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
 
-## Project Structure
+<details>
+<summary><span style="font-family: 'Merriweather', serif;">Project Structure</span></summary>
 
 ```
 atheno/
@@ -139,9 +140,11 @@ atheno/
 └── public/               # Static assets
 ```
 
-## Usage
+</details>
 
-### Creating an Article
+## <span style="font-family: 'Merriweather', serif;">Usage</span>
+
+### <span style="font-family: 'Merriweather', serif;">Creating an Article</span>
 
 1. Sign up or sign in to your account
 2. Navigate to the Dashboard
@@ -151,7 +154,7 @@ atheno/
 6. Use the Preview tab to see the rendered output
 7. Save as draft or publish immediately
 
-### Markdown Support
+### <span style="font-family: 'Merriweather', serif;">Markdown Support</span>
 
 Atheno supports GitHub Flavored Markdown with additional features:
 
@@ -162,7 +165,7 @@ Atheno supports GitHub Flavored Markdown with additional features:
 - **Tables**: Full table support
 - **Math**: Inline `$equation$` or block `$$equation$$` using KaTeX
 
-### Customizing Article Covers
+### <span style="font-family: 'Merriweather', serif;">Customizing Article Covers</span>
 
 1. Edit an article
 2. Use the Cover Customizer panel on the right
@@ -170,7 +173,8 @@ Atheno supports GitHub Flavored Markdown with additional features:
 4. Apply filters (blur, grayscale, brightness, grain)
 5. Toggle title visibility on the cover
 
-## API Routes
+<details>
+<summary><span style="font-family: 'Merriweather', serif;">API Routes</span></summary>
 
 - `GET /api/articles` - Fetch all published articles
 - `GET /api/articles/:id` - Fetch a specific article
@@ -178,16 +182,21 @@ Atheno supports GitHub Flavored Markdown with additional features:
 - `PUT /api/articles/:id` - Update an article
 - `DELETE /api/articles/:id` - Delete an article
 
-## Deployment
+</details>
 
-### Vercel
+</details>
+
+<details>
+<summary><span style="font-family: 'Merriweather', serif;">Deployment</span></summary>
+
+### <span style="font-family: 'Merriweather', serif;">Vercel</span>
 
 1. Push your code to a Git repository
 2. Import the project in Vercel
 3. Configure environment variables in Vercel dashboard
 4. Deploy
 
-### Other Platforms
+### <span style="font-family: 'Merriweather', serif;">Other Platforms</span>
 
 The application can be deployed to any platform that supports Next.js applications (Railway, Render, AWS, etc.). Ensure you:
 
@@ -196,9 +205,14 @@ The application can be deployed to any platform that supports Next.js applicatio
 - Configure the build command: `npm run build`
 - Configure the start command: `npm start`
 
-## Development
+</details>
 
-### Available Scripts
+</details>
+
+<details>
+<summary><span style="font-family: 'Merriweather', serif;">Development</span></summary>
+
+### <span style="font-family: 'Merriweather', serif;">Available Scripts</span>
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -209,15 +223,17 @@ The application can be deployed to any platform that supports Next.js applicatio
 - `npm run db:push` - Push schema changes to database
 - `npm run db:studio` - Open Prisma Studio
 
-## Contributing
+</details>
+
+## <span style="font-family: 'Merriweather', serif;">Contributing</span>
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## <span style="font-family: 'Merriweather', serif;">License</span>
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Acknowledgments
+## <span style="font-family: 'Merriweather', serif;">Acknowledgments</span>
 
 - Built with [Next.js](https://nextjs.org/)
 - UI components from [shadcn/ui](https://ui.shadcn.com)
